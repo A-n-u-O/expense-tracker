@@ -1,31 +1,33 @@
-import { Box, Typography } from "@mui/material";
 import React from "react";
 import AuthForm from "../components/AuthForm/AuthForm";
 import { Link, useNavigate } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 
-const Login = () => {
+function Login() {
   const navigate = useNavigate();
+
   const handleLogin = async ({ email, password }) => {
+    console.log("Attempting to log in with:", email, password); // Debugging
     try {
-      //sign in user with firebase
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("user logged in successfully!");
-      alert("user logged in successfully!");
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in successfully!", userCredential.user);
       navigate("/dashboard");
     } catch (error) {
-      console.error("error logging in:", error.message);
+      console.error("Error logging in:", error);
       alert(error.message);
     }
   };
+
   return (
     <Box>
-      <AuthForm formTitle={"Login"} onSubmit={handleLogin} isSignup={false} />
+      <AuthForm formTitle="Login" onSubmit={handleLogin} isSignUp={false} />
       <Typography align="center" sx={{ mt: 2 }}>
-        Don't have an account? <Link to={"/signup"}>Sign Up</Link>
+        Don't have an account? <Link to="/signup">Sign Up</Link>
       </Typography>
     </Box>
   );
-};
+}
+
 export default Login;

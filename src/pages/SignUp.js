@@ -4,27 +4,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase";
-const SignUp = () => {
+
+function SignUp() {
   const navigate = useNavigate();
-  const handleSignup = async ({ email, password }) => {
+
+  const handleSignUp = async ({ email, password }) => {
+    console.log("Attempting to sign up with:", email, password); // Debugging
     try {
-      //create new user with firebase
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up successfully!");
-      alert("User signed up successfully!");
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User signed up successfully!", userCredential.user);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Error signing up:", error.message);
+      console.error("Error signing up:", error);
       alert(error.message);
     }
   };
+
   return (
     <Box>
-      <AuthForm formTitle={"Sign Up"} onSubmit={handleSignup} isSignup={true} />
+      <AuthForm formTitle="Sign Up" onSubmit={handleSignUp} isSignUp={true} />
       <Typography align="center" sx={{ mt: 2 }}>
-        Already have an account? <Link to={"/login"}>Sign Up</Link>
+        Already have an account? <Link to="/login">Login</Link>
       </Typography>
     </Box>
   );
-};
+}
+
 export default SignUp;
