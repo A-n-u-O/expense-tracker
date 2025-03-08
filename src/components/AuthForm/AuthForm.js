@@ -1,20 +1,26 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-const AuthForm = ({ formTitle, onSubmit, isSignup }) => {
+import { TextField, Button, Box, Typography } from "@mui/material";
+
+function AuthForm({ formTitle, onSubmit, isSignUp }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isSignup && password !== confirmPassword) {
-      alert("Passwords do not match");
+    console.log("Form submitted with:", { email, password }); // Debugging
+    if (isSignUp && password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
     }
-    onSubmit({ email, password });
+    onSubmit({ email, password }); // Pass email and password to the parent component
   };
+
   return (
-    <Box>
-      <Typography>{formTitle}</Typography>
+    <Box sx={{ maxWidth: 400, mx: "auto", my: 4, p: 3, boxShadow: 3, borderRadius: 2 }}>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        {formTitle}
+      </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Email"
@@ -22,7 +28,9 @@ const AuthForm = ({ formTitle, onSubmit, isSignup }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           fullWidth
+          margin="normal"
           required
+          autoComplete="off" // Disable autofill
         />
         <TextField
           label="Password"
@@ -30,28 +38,28 @@ const AuthForm = ({ formTitle, onSubmit, isSignup }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           fullWidth
+          margin="normal"
           required
+          autoComplete="off" // Disable autofill
         />
+        {isSignUp && (
+          <TextField
+            label="Confirm Password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            fullWidth
+            margin="normal"
+            required
+            autoComplete="off" // Disable autofill
+          />
+        )}
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+          {formTitle}
+        </Button>
       </form>
-      {isSignup && (
-        <TextField
-          label="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          fullWidth
-          required
-        />
-      )}
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        fullWidth
-        sx={{ mt: 2 }}>
-        {formTitle}
-      </Button>
     </Box>
   );
-};
+}
+
 export default AuthForm;
